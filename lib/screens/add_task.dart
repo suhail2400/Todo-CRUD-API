@@ -85,6 +85,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       //show success or fail message based on status
       if(isSuccess) {
         showSuccessMessage(context,message: 'Updation Success');
+        Navigator.pop(context);
       }else {
         showErrorMessage(context, message:'Updation failed');
       }
