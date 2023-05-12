@@ -1,62 +1,67 @@
 import 'package:flutter/material.dart';
+import 'package:todo/models/todo_model.dart';
 
-class todoCard extends StatelessWidget {
+class TodoCard extends StatelessWidget {
   final int index;
-  final Map item;
-  final Function(Map) navigateEdit;
+  final TodoModel todo;
+  final Function(TodoModel) navigateEdit;
   final Function(String) deleteById;
-  const todoCard({
-    super.key,
-    required this.index,
-    required this.item,
-    required this.navigateEdit,
-    required this.deleteById
-  });
+  const TodoCard(
+      {super.key,
+      required this.index,
+      required this.todo,
+      required this.navigateEdit,
+      required this.deleteById});
 
   @override
   Widget build(BuildContext context) {
-    final id = item['_id'] as String;
     return Dismissible(
-      onDismissed: (direction){
-        if(direction == DismissDirection.endToStart){
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text('Item Deleted',style:TextStyle(color:Colors.white)), backgroundColor:Colors.red));
-          deleteById(id);
+      onDismissed: (direction) {
+        if (direction == DismissDirection.endToStart) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content:
+                  Text('Item Deleted', style: TextStyle(color: Colors.white)),
+              backgroundColor: Colors.red));
+          deleteById(todo.id.toString());
         }
       },
-          key:Key(id),
+      key: Key(todo.id.toString()),
       child: Card(
-                  child: ListTile(
-                    leading: CircleAvatar(child: Text('${index + 1}')),
-                    title:Text(item['title']),
-                    subtitle: Text(item['description']),
-                    // trailing: PopupMenuButton(
-                    //   onSelected: (value){
-                    //     if(value == 'edit'){
-                    //       // open edit
-                    //       navigateEdit(item);
-                    //     }else if (value == 'delete'){
-                    //       // delete and remove the item
-                    //       deleteById(id);
-                    //     }
-                    //   },
-                    //   itemBuilder: (context){
-                    //     return [
-                    //       PopupMenuItem(
-                    //         child:Text('Edit'),
-                    //         value: 'edit', 
-                    //         ),
-                    //       PopupMenuItem(
-                    //         child:Text('Delete'),
-                    //         value:'delete'
-                    //         )
-                    //     ];
-                    //   },
-                    // ),
-                    trailing: IconButton(icon: Icon(Icons.edit),onPressed: () {
-                      navigateEdit(item);
-                    },),
-                  ),
-                ),
+        child: ListTile(
+          leading: CircleAvatar(child: Text('${index + 1}')),
+          title: Text(todo.title ?? ''),
+          subtitle: Text(todo.description ?? ''),
+          // trailing: PopupMenuButton(
+          //   onSelected: (value){
+          //     if(value == 'edit'){
+          //       // open edit
+          //       navigateEdit(item);
+          //     }else if (value == 'delete'){
+          //       // delete and remove the item
+          //       deleteById(id);
+          //     }
+          //   },
+          //   itemBuilder: (context){
+          //     return [
+          //       PopupMenuItem(
+          //         child:Text('Edit'),
+          //         value: 'edit',
+          //         ),
+          //       PopupMenuItem(
+          //         child:Text('Delete'),
+          //         value:'delete'
+          //         )
+          //     ];
+          //   },
+          // ),
+          trailing: IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () {
+              navigateEdit(todo);
+            },
+          ),
+        ),
+      ),
     );
   }
 }
